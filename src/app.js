@@ -19,6 +19,10 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 // routes
 app.use('/auth', authRouter);
 
+app.get('/dashboard', (req, res) => {
+    res.render('dashboard', { title: 'Dashboard' });
+});
+
 const PORT = configuration.server.port;
 
 app.listen(PORT, () => {
