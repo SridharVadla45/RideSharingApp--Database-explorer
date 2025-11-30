@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+
+model user {
+  user_id       Int              @id @default(autoincrement())
+  name          String
+  email         String           @unique
+  phone_number  String?
+  
+  // Relations
+  payment_methods payment_method[]
+  ratings        rating[]
+  bookings       books[]
+  
+  @@map("user")
+}
+
+model driver {
+  driver_id     Int              @id @default(autoincrement())
+  name          String
+  email         String           @unique
+  phone_number  String?
+  
+  // Relations
+  rides          ride[]
+  driver_vehicles driver_vehicle[]
+  
+  @@map("driver")
+}
+
+model vehicle {
+  vehicle_id      Int              @id @default(autoincrement())
+  type            String
+  model           String
+  license_plate_no String           @unique
+  
+  // Relations
+  rides           ride[]
+  driver_vehicles driver_vehicle[]
+  
+  @@map("vehicle")
+}
+
+model ride {
+  ride_id       Int              @id @default(autoincrement())
+  driver_id     Int?
+  vehicle_id    Int?
+  description   String?
+  unit_price    Decimal?         @db.Decimal(10, 2)
+  date          DateTime?
+  status        String?
+  pickup        String?
+  drop_location String?
+  
+  // Relations
+  driver        driver?          @relation(fields: [driver_id], references: [driver_id], onDelete: SetNull, onUpdate: Cascade)
+  vehicle       vehicle?         @relation(fields: [vehicle_id], references: [vehicle_id], onDelete: SetNull, onUpdate: Cascade)
+  payments      payment[]
+  ratings       rating[]
+  bookings      books[]
+  
+  @@map("ride")
+}
+
+model payment_method {
+  method_id     Int              @id @default(autoincrement())
+  method_type   String
+  user_id       Int
+  
+  // Relations
+  user          user             @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  card          card?
+  cash          cash?
+  payments      payment[]
+  
+  @@map("payment_method")
+}
+
+model card {
+  card_no       String           @id
+  type          String?
+  expiry        DateTime?
+  name          String?
+  method_id     Int              @unique
+  
+  // Relations
+  payment_method payment_method  @relation(fields: [method_id], references: [method_id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@map("card")
+}
+
+model cash {
+  cash_id       Int              @id @default(autoincrement())
+  method_id     Int              @unique
+  
+  // Relations
+  payment_method payment_method  @relation(fields: [method_id], references: [method_id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@map("cash")
+}
+
+model payment {
+  payment_id    Int              @id @default(autoincrement())
+  ride_id       Int
+  amount        Decimal          @db.Decimal(10, 2)
+  status        String?
+  method_id     Int
+  
+  // Relations
+  ride          ride             @relation(fields: [ride_id], references: [ride_id], onDelete: Cascade, onUpdate: Cascade)
+  payment_method payment_method  @relation(fields: [method_id], references: [method_id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@map("payment")
+}
+
+model rating {
+  rating_id     Int              @id @default(autoincrement())
+  score         Int?
+  comments      String?
+  created_at    DateTime?        @default(now())
+  user_id       Int
+  ride_id       Int
+  
+  // Relations
+  user          user             @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  ride          ride             @relation(fields: [ride_id], references: [ride_id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@map("rating")
+}
+
+model driver_vehicle {
+  driver_id     Int
+  vehicle_id    Int
+  
+  // Relations
+  driver        driver           @relation(fields: [driver_id], references: [driver_id], onDelete: Cascade, onUpdate: Cascade)
+  vehicle       vehicle          @relation(fields: [vehicle_id], references: [vehicle_id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@id([driver_id, vehicle_id])
+  @@map("driver_vehicle")
+}
+
+model books {
+  user_id       Int
+  ride_id       Int
+  
+  // Relations
+  user          user             @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  ride          ride             @relation(fields: [ride_id], references: [ride_id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@id([user_id, ride_id])
+  @@map("books")
+}
+
