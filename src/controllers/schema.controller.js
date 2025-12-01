@@ -1,13 +1,10 @@
-import { fetchDatabaseSchema } from "../services/schema.service";
-export const getDatabaseSchema = async (req, res) => {
+import { databaseRepository } from "../repositories/utility.respository.js";
+
+export const getSchemaController = async (req, res) => {
     try {
-        const schema = await fetchDatabaseSchema();
-        res.render("database_schema", { 
-            title: "Database Schema",
-            schema 
-        });
-    }   catch (error) {
-        console.error("Error getting database schema:", error);
-        res.status(500).send("Internal Server Error");
+        const schema = await databaseRepository.fetchDatabaseSchema();
+        res.json(schema);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch database schema' });
     }
-}
+};  

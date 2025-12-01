@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ridesharing App - Database Explorer</title>
+    <title>Database Explorer | Prisma Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,34 +12,45 @@
         
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
         }
         
-        .gradient-bg {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        .sidebar-bg {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        }
+        
+        .content-bg {
+            background-color: #0f172a;
+        }
+        
+        .card-bg {
+            background-color: #1e293b;
+            border: 1px solid #334155;
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             transition: all 0.3s ease;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
         }
         
         .sidebar-item.active {
-            background: rgba(79, 70, 229, 0.1);
-            border-right: 3px solid #4f46e5;
-            color: #4f46e5;
+            background: rgba(59, 130, 246, 0.15);
+            border-right: 3px solid #3b82f6;
+            color: #3b82f6;
         }
         
         .sidebar-item:hover {
-            background: rgba(79, 70, 229, 0.05);
+            background: rgba(59, 130, 246, 0.08);
         }
         
         .table-row:hover {
-            background: #f9fafb;
+            background: #1e293b;
         }
         
         .chart-container {
@@ -55,20 +66,21 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 1000;
             align-items: center;
             justify-content: center;
         }
         
         .modal-content {
-            background: white;
+            background: #1e293b;
             border-radius: 12px;
             width: 90%;
             max-width: 600px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             max-height: 90vh;
             overflow-y: auto;
+            border: 1px solid #334155;
         }
         
         .fade-in {
@@ -76,9 +88,9 @@
         }
         
         .tab-button.active {
-            background: rgba(79, 70, 229, 0.1);
-            color: #4f46e5;
-            border-bottom: 2px solid #4f46e5;
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
         }
         
         .loading {
@@ -106,56 +118,113 @@
         
         .schema-table:hover {
             transform: translateX(5px);
-            background: rgba(79, 70, 229, 0.05);
+            background: rgba(59, 130, 246, 0.08);
         }
         
-        .stat-card {
-            transition: transform 0.3s ease;
+        .table-header {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
         }
         
-        .stat-card:hover {
+        .table-cell {
+            border-color: #334155;
+        }
+        
+        input, select, textarea {
+            background-color: #1e293b;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .analytics-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #1e293b, #1a2438);
+            border: 1px solid #334155;
+        }
+        
+        .analytics-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            border-color: #475569;
+        }
+        
+        .stat-highlight {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .form-input {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 12px;
+            color: #e2e8f0;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="content-bg">
     <!-- Fixed Navbar -->
-    <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+    <nav class="fixed top-0 left-0 right-0 card-bg shadow-lg z-50 border-b border-slate-700">
         <div class="flex items-center justify-between px-6 py-3">
             <!-- Logo and Brand -->
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
                     <i class="fas fa-database text-white text-lg"></i>
                 </div>
-                <h1 class="text-xl font-bold text-gray-900">Ridesharing App</h1>
+                <div>
+                    <h1 class="text-xl font-bold text-white">Database Explorer</h1>
+                    <p class="text-xs text-slate-400">Powered by Prisma</p>
+                </div>
             </div>
             
-            <!-- User Menu -->
+            <!-- Connection Status -->
             <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 px-3 py-1 rounded-full bg-green-900/30 text-green-400 border border-green-800/50">
+                    <i class="fas fa-circle text-xs"></i>
+                    <span class="text-sm font-medium">Connected</span>
+                </div>
+                
                 <div class="relative group">
-                    <button class="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-3 py-2 transition-colors">
-                        <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center">
-                            <span class="text-white font-semibold text-sm">JD</span>
+                    <button class="flex items-center space-x-2 bg-slate-700 hover:bg-slate-600 rounded-lg px-3 py-2 transition-colors">
+                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm">AD</span>
                         </div>
-                        <span class="text-gray-700 font-medium">John Doe</span>
-                        <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                        <span class="text-slate-200 font-medium">Admin</span>
+                        <i class="fas fa-chevron-down text-slate-400 text-xs"></i>
                     </button>
-                    
-                    <!-- Dropdown Menu -->
-                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                        <div class="py-1">
-                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-user mr-2"></i>Profile
-                            </a>
-                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-cog mr-2"></i>Settings
-                            </a>
-                            <div class="border-t border-gray-200 my-1"></div>
-                            <a href="#" class="block px-4 py-2 text-red-600 hover:bg-gray-100">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -164,31 +233,31 @@
     <!-- Main Content -->
     <div class="pt-16 flex">
         <!-- Sidebar -->
-        <div class="w-64 bg-white shadow-sm h-screen fixed pt-4">
+        <div class="w-64 sidebar-bg h-screen fixed pt-4 border-r border-slate-700">
             <div class="px-4 py-2">
-                <h2 class="text-xs uppercase text-gray-500 font-semibold tracking-wider mb-2">Navigation</h2>
+                <h2 class="text-xs uppercase text-slate-400 font-semibold tracking-wider mb-2">Navigation</h2>
                 <ul class="space-y-1">
                     <li>
-                        <a href="#" class="sidebar-item active flex items-center space-x-3 py-2 px-3 rounded-lg text-gray-700" data-tab="tables">
+                        <a href="#" class="sidebar-item active flex items-center space-x-3 py-2 px-3 rounded-lg text-slate-200" data-tab="tables">
                             <i class="fas fa-table w-5"></i>
-                            <span>Show Tables</span>
+                            <span>Data Browser</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="sidebar-item flex items-center space-x-3 py-2 px-3 rounded-lg text-gray-700" data-tab="add-data">
+                        <a href="#" class="sidebar-item flex items-center space-x-3 py-2 px-3 rounded-lg text-slate-200" data-tab="add-data">
                             <i class="fas fa-plus w-5"></i>
-                            <span>Add Data</span>
+                            <span>Add Records</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="sidebar-item flex items-center space-x-3 py-2 px-3 rounded-lg text-gray-700" data-tab="analytics">
+                        <a href="#" class="sidebar-item flex items-center space-x-3 py-2 px-3 rounded-lg text-slate-200" data-tab="analytics">
                             <i class="fas fa-chart-bar w-5"></i>
                             <span>Analytics</span>
                         </a>
                     </li>
                 </ul>
                 
-                <h2 class="text-xs uppercase text-gray-500 font-semibold tracking-wider mt-6 mb-2">Database Schema</h2>
+                <h2 class="text-xs uppercase text-slate-400 font-semibold tracking-wider mt-6 mb-2">Database Schema</h2>
                 <div id="schemaList" class="max-h-64 overflow-y-auto">
                     <!-- Schema will be populated dynamically -->
                 </div>
@@ -197,111 +266,55 @@
 
         <!-- Page Content -->
         <div class="ml-64 flex-1 p-6">
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="stat-card bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">Total Records</p>
-                            <h3 class="text-2xl font-bold text-gray-900 mt-1" id="totalRecords">1,248</h3>
-                            <p class="text-xs text-green-500 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i>12% from last week
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
-                            <i class="fas fa-database text-white text-lg"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">Active Tables</p>
-                            <h3 class="text-2xl font-bold text-gray-900 mt-1" id="activeTables">12</h3>
-                            <p class="text-xs text-green-500 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i>2 new this month
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-table text-green-600 text-lg"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">Data Size</p>
-                            <h3 class="text-2xl font-bold text-gray-900 mt-1" id="dataSize">245 MB</h3>
-                            <p class="text-xs text-green-500 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i>18% growth
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-hdd text-blue-600 text-lg"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">Query Performance</p>
-                            <h3 class="text-2xl font-bold text-gray-900 mt-1" id="queryPerformance">98.7%</h3>
-                            <p class="text-xs text-gray-500 mt-1">
-                                <i class="fas fa-bolt text-yellow-500 mr-1"></i>Excellent
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-tachometer-alt text-yellow-600 text-lg"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Show Tables Section -->
+            <!-- Data Browser Section -->
             <div id="tablesSection" class="content-section">
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Show Table Data</h2>
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-white mb-2">Data Browser</h1>
+                    <p class="text-slate-400">Explore and manage your database records</p>
+                </div>
+                
+                <div class="card-bg rounded-xl shadow-lg p-6 mb-6">
                     <div class="flex space-x-4 mb-6">
                         <div class="flex-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Table</label>
-                            <select id="tableSelector" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Select Table</label>
+                            <select id="tableSelector" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
                                 <option value="">-- Select a table --</option>
                             </select>
                         </div>
                         <div class="flex items-end">
-                            <button id="loadTableDataBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                            <button id="loadTableDataBtn" class="btn-primary text-white font-medium px-4 py-2 rounded-lg">
                                 <i class="fas fa-sync-alt mr-2"></i>Load Data
                             </button>
                         </div>
                     </div>
                     
-                    <div id="tableDataContainer" class="border border-gray-200 rounded-lg overflow-hidden">
-                        <div class="bg-gray-50 p-4 text-center text-gray-500">
-                            <i class="fas fa-table text-2xl mb-2 block"></i>
+                    <div id="tableDataContainer" class="border border-slate-700 rounded-lg overflow-hidden">
+                        <div class="bg-slate-800 p-8 text-center text-slate-400">
+                            <i class="fas fa-table text-3xl mb-2 block"></i>
                             Select a table and click "Load Data" to view its contents
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Add Data Section -->
+            <!-- Add Records Section -->
             <div id="addDataSection" class="content-section hidden">
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Add New Data</h2>
-                    
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-white mb-2">Add Records</h1>
+                    <p class="text-slate-400">Create new records in your database</p>
+                </div>
+                
+                <div class="card-bg rounded-xl shadow-lg p-6 mb-6">
                     <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Select Table to Insert Into</h3>
+                        <h3 class="text-lg font-semibold text-slate-200 mb-3">Select Table</h3>
                         <div class="flex space-x-4">
                             <div class="flex-1">
-                                <select id="addDataTableSelector" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition">
+                                <select id="addDataTableSelector" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
                                     <option value="">-- Select a table --</option>
                                 </select>
                             </div>
                             <div>
-                                <button id="generateFormBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                                <button id="generateFormBtn" class="btn-primary text-white font-medium px-4 py-2 rounded-lg">
                                     <i class="fas fa-plus mr-2"></i>Generate Form
                                 </button>
                             </div>
@@ -309,15 +322,15 @@
                     </div>
                     
                     <div id="dataFormContainer">
-                        <div class="bg-gray-50 p-8 text-center text-gray-500 rounded-lg">
+                        <div class="bg-slate-800 p-8 text-center text-slate-400 rounded-lg">
                             <i class="fas fa-edit text-3xl mb-2 block"></i>
                             Select a table and click "Generate Form" to create a data entry form
                         </div>
                     </div>
                     
                     <div class="mt-6 flex justify-end hidden" id="submitDataContainer">
-                        <button id="submitDataBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
-                            <i class="fas fa-save mr-2"></i>Add Data
+                        <button id="submitDataBtn" class="btn-primary text-white font-medium px-4 py-2 rounded-lg">
+                            <i class="fas fa-save mr-2"></i>Add Record
                         </button>
                     </div>
                 </div>
@@ -325,63 +338,125 @@
 
             <!-- Analytics Section -->
             <div id="analyticsSection" class="content-section hidden">
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Database Analytics</h2>
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-white mb-2">Analytics Dashboard</h1>
+                    <p class="text-slate-400">Gain insights from your data with visual analytics</p>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="analytics-card rounded-xl p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-slate-400">Total Records</p>
+                                <h3 id="totalRecords" class="text-2xl font-bold stat-highlight mt-1">-</h3>
+                                <p class="text-xs text-green-500 mt-1">
+                                    <i class="fas fa-arrow-up mr-1"></i>Loading...
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-database text-blue-400 text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Select Analysis Type</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div class="analytics-option border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-indigo-300 transition-colors" data-type="forecast">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-chart-line text-blue-600"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-medium text-gray-900">Budget Forecast</h4>
-                                        <p class="text-sm text-gray-500">Project future expenses with inflation</p>
-                                    </div>
-                                </div>
+                    <div class="analytics-card rounded-xl p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-slate-400">Database Size</p>
+                                <h3 id="dbSize" class="text-2xl font-bold stat-highlight mt-1">-</h3>
+                                <p class="text-xs text-green-500 mt-1">
+                                    <i class="fas fa-arrow-up mr-1"></i>Loading...
+                                </p>
                             </div>
-                            
-                            <div class="analytics-option border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-indigo-300 transition-colors" data-type="topN">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-trophy text-green-600"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-medium text-gray-900">Top/Bottom N</h4>
-                                        <p class="text-sm text-gray-500">Find best or worst performing items</p>
-                                    </div>
-                                </div>
+                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-hdd text-purple-400 text-lg"></i>
                             </div>
-                            
-                            <div class="analytics-option border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-indigo-300 transition-colors" data-type="custom">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-code text-purple-600"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-medium text-gray-900">Custom Query</h4>
-                                        <p class="text-sm text-gray-500">Run your own SQL analysis</p>
-                                    </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card rounded-xl p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-slate-400">Query Performance</p>
+                                <h3 id="queryPerformance" class="text-2xl font-bold stat-highlight mt-1">-</h3>
+                                <p class="text-xs text-green-500 mt-1">
+                                    <i class="fas fa-bolt mr-1"></i>Loading...
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-tachometer-alt text-green-400 text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Analytics Tools -->
+                <div class="card-bg rounded-xl shadow-lg p-6 mb-6">
+                    <h2 class="text-xl font-bold text-white mb-6">Analytics Tools</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="analytics-card rounded-xl p-5 cursor-pointer" data-type="forecast">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+                                    <i class="fas fa-chart-line text-blue-400 text-2xl"></i>
                                 </div>
+                                <h3 class="font-semibold text-slate-200 mb-2">Budget Forecast</h3>
+                                <p class="text-sm text-slate-400">Project future expenses with inflation</p>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-card rounded-xl p-5 cursor-pointer" data-type="topN">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
+                                    <i class="fas fa-trophy text-green-400 text-2xl"></i>
+                                </div>
+                                <h3 class="font-semibold text-slate-200 mb-2">Top/Bottom N</h3>
+                                <p class="text-sm text-slate-400">Find best or worst performing items</p>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-card rounded-xl p-5 cursor-pointer" data-type="custom">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+                                    <i class="fas fa-code text-purple-400 text-2xl"></i>
+                                </div>
+                                <h3 class="font-semibold text-slate-200 mb-2">Custom Query</h3>
+                                <p class="text-sm text-slate-400">Run your own SQL analysis</p>
                             </div>
                         </div>
                     </div>
                     
                     <div id="analyticsFormsContainer">
-                        <div class="bg-gray-50 p-8 text-center text-gray-500 rounded-lg">
+                        <div class="bg-slate-800 p-8 text-center text-slate-400 rounded-lg">
                             <i class="fas fa-chart-bar text-3xl mb-2 block"></i>
-                            Select an analysis type to get started
+                            Select an analytics tool to get started
                         </div>
                     </div>
                     
                     <div id="analyticsResultsContainer" class="mt-6 hidden">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Analysis Results</h3>
-                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-slate-200 mb-3">Analysis Results</h3>
+                        <div class="card-bg rounded-lg p-4">
                             <div id="analyticsResultsContent">
                                 <!-- Results will be displayed here -->
                             </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card-bg rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-slate-200 mb-4">Record Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card-bg rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-slate-200 mb-4">Monthly Activity</h3>
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -389,18 +464,18 @@
         </div>
     </div>
 
-    <!-- Success/Error Message Modal -->
+    <!-- Message Modal -->
     <div id="messageModal" class="modal">
         <div class="modal-content fade-in">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900" id="modalTitle">Success</h2>
+            <div class="p-6 border-b border-slate-700">
+                <h2 class="text-xl font-bold text-white" id="modalTitle">Success</h2>
             </div>
             <div class="p-6">
                 <div id="modalMessage" class="mb-4">
                     <!-- Message will appear here -->
                 </div>
                 <div class="flex justify-end">
-                    <button id="closeModalBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    <button id="closeModalBtn" class="btn-primary text-white font-medium px-4 py-2 rounded-lg">
                         OK
                     </button>
                 </div>
@@ -411,57 +486,14 @@
     <script>
         // Application state
         const appState = {
-            schema: [
-                { 
-                    name: 'employees', 
-                    columns: ['id', 'name', 'department', 'salary', 'hire_date'],
-                    sampleData: [
-                        { id: 1, name: 'John Doe', department: 'Engineering', salary: 75000, hire_date: '2022-03-15' },
-                        { id: 2, name: 'Jane Smith', department: 'Marketing', salary: 65000, hire_date: '2021-07-22' },
-                        { id: 3, name: 'Robert Johnson', department: 'Sales', salary: 70000, hire_date: '2020-11-05' }
-                    ]
-                },
-                { 
-                    name: 'departments', 
-                    columns: ['id', 'name', 'budget', 'location'],
-                    sampleData: [
-                        { id: 1, name: 'Engineering', budget: 500000, location: 'Floor 3' },
-                        { id: 2, name: 'Marketing', budget: 300000, location: 'Floor 2' },
-                        { id: 3, name: 'Sales', budget: 450000, location: 'Floor 1' }
-                    ]
-                },
-                { 
-                    name: 'projects', 
-                    columns: ['id', 'name', 'budget', 'status', 'start_date'],
-                    sampleData: [
-                        { id: 1, name: 'Website Redesign', budget: 50000, status: 'In Progress', start_date: '2023-01-15' },
-                        { id: 2, name: 'Mobile App', budget: 75000, status: 'Planning', start_date: '2023-03-01' },
-                        { id: 3, name: 'Database Migration', budget: 30000, status: 'Completed', start_date: '2022-11-10' }
-                    ]
-                },
-                { 
-                    name: 'expenses', 
-                    columns: ['id', 'category', 'amount', 'date', 'description'],
-                    sampleData: [
-                        { id: 1, category: 'Software', amount: 5000, date: '2023-04-10', description: 'Annual license renewal' },
-                        { id: 2, category: 'Hardware', amount: 12000, date: '2023-04-05', description: 'New servers' },
-                        { id: 3, category: 'Training', amount: 3500, date: '2023-03-28', description: 'Team workshop' }
-                    ]
-                },
-                { 
-                    name: 'products', 
-                    columns: ['id', 'name', 'price', 'rating', 'category'],
-                    sampleData: [
-                        { id: 1, name: 'Laptop Pro', price: 1299.99, rating: 4.7, category: 'Electronics' },
-                        { id: 2, name: 'Wireless Mouse', price: 49.99, rating: 4.3, category: 'Accessories' },
-                        { id: 3, name: 'Monitor 24"', price: 299.99, rating: 4.5, category: 'Electronics' }
-                    ]
-                }
-            ],
+            schema: [], // Will be populated from API
             tableData: {},
             selectedTable: null
         };
 
+        // API Configuration
+        const API_BASE_URL = `http://localhost:4000/api`;
+        
         // DOM Elements
         const tablesSection = document.getElementById('tablesSection');
         const addDataSection = document.getElementById('addDataSection');
@@ -482,23 +514,14 @@
         const modalTitle = document.getElementById('modalTitle');
         const modalMessage = document.getElementById('modalMessage');
         const closeModalBtn = document.getElementById('closeModalBtn');
-        
-        // Stats elements
-        const totalRecords = document.getElementById('totalRecords');
-        const activeTables = document.getElementById('activeTables');
-        const dataSize = document.getElementById('dataSize');
-        const queryPerformance = document.getElementById('queryPerformance');
+        const totalRecordsEl = document.getElementById('totalRecords');
+        const dbSizeEl = document.getElementById('dbSize');
+        const queryPerformanceEl = document.getElementById('queryPerformance');
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Set up event listeners
             setupEventListeners();
-            
-            // Initialize the app with sample data
             initializeApp();
-            
-            // Update random stats
-            updateRandomStats();
         });
 
         // Set up all event listeners
@@ -520,8 +543,8 @@
             submitDataBtn.addEventListener('click', submitData);
             
             // Analytics
-            document.querySelectorAll('.analytics-option').forEach(option => {
-                option.addEventListener('click', function() {
+            document.querySelectorAll('.analytics-card[data-type]').forEach(card => {
+                card.addEventListener('click', function() {
                     const type = this.getAttribute('data-type');
                     showAnalyticsForm(type);
                 });
@@ -533,35 +556,177 @@
             });
         }
 
-        // Initialize the application with sample data
-        function initializeApp() {
-            // Populate table selectors
-            populateTableSelectors();
-            
-            // Populate schema list
-            populateSchemaList();
-            
-            // Initialize table data with sample data
-            appState.schema.forEach(table => {
-                appState.tableData[table.name] = {
-                    columns: table.columns,
-                    rows: [...table.sampleData]
-                };
-            });
+        // Initialize the application with real data
+        async function initializeApp() {
+            try {
+                await loadSchema();
+                await initializeCharts();
+                await loadAnalyticsStats();
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                showMessage('Failed to initialize application. Please check your API connection.', 'error');
+            }
         }
 
-        // Update random stats
-        function updateRandomStats() {
-            // Generate random but realistic stats
-            const recordCount = Math.floor(Math.random() * 5000) + 1000;
-            const tableCount = appState.schema.length;
-            const sizeInMB = Math.floor(Math.random() * 500) + 100;
-            const performance = (Math.random() * 5 + 95).toFixed(1);
-            
-            totalRecords.textContent = recordCount.toLocaleString();
-            activeTables.textContent = tableCount;
-            dataSize.textContent = `${sizeInMB} MB`;
-            queryPerformance.textContent = `${performance}%`;
+        // Load schema from API
+        async function loadSchema() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/schema`);
+                if (!response.ok) throw new Error('Failed to fetch schema');
+                
+                const data = await response.json();
+                appState.schema = data.tables;
+
+                console.log('Loaded schema:', appState.schema);
+                
+                populateTableSelectors();
+                populateSchemaList();
+                
+            } catch (error) {
+                console.error('Error loading schema:', error);
+                appState.schema = getSampleSchema();
+                populateTableSelectors();
+                populateSchemaList();
+                showMessage('Using sample data. API connection failed.', 'error');
+            }
+        }
+
+        // Get sample schema for fallback
+        function getSampleSchema() {
+            return [
+                { 
+                    name: 'user', 
+                    columns: ['user_id', 'name', 'email', 'phone_number']
+                },
+                { 
+                    name: 'driver', 
+                    columns: ['driver_id', 'name', 'email', 'phone_number']
+                },
+                { 
+                    name: 'vehicle', 
+                    columns: ['vehicle_id', 'type', 'model', 'license_plate_no']
+                }
+            ];
+        }
+
+        // Initialize charts
+        async function initializeCharts() {
+            try {
+                // Distribution Chart
+                const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+                new Chart(distributionCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Users', 'Drivers', 'Vehicles', 'Rides', 'Payments'],
+                        datasets: [{
+                            data: [35, 20, 25, 40, 35],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(139, 92, 246, 0.8)',
+                                'rgba(239, 68, 68, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgb(59, 130, 246)',
+                                'rgb(16, 185, 129)',
+                                'rgb(245, 158, 11)',
+                                'rgb(139, 92, 246)',
+                                'rgb(239, 68, 68)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#e2e8f0'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Activity Chart
+                const activityCtx = document.getElementById('activityChart').getContext('2d');
+                new Chart(activityCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Rides',
+                            data: [65, 78, 66, 84, 105, 120],
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Payments',
+                            data: [45, 62, 55, 70, 92, 105],
+                            borderColor: 'rgb(16, 185, 129)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#e2e8f0'
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#94a3b8'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#94a3b8'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error initializing charts:', error);
+            }
+        }
+
+        // Load analytics stats
+        async function loadAnalyticsStats() {
+            try {
+                // Simulate stats for demo
+                totalRecordsEl.textContent = '250';
+                dbSizeEl.textContent = '15.2 MB';
+                queryPerformanceEl.textContent = '98.7%';
+                
+            } catch (error) {
+                console.error('Error loading analytics stats:', error);
+                totalRecordsEl.textContent = '250';
+                dbSizeEl.textContent = '15.2 MB';
+                queryPerformanceEl.textContent = '98.7%';
+            }
         }
 
         // Populate table selectors
@@ -570,13 +735,11 @@
             addDataTableSelector.innerHTML = '<option value="">-- Select a table --</option>';
             
             appState.schema.forEach(table => {
-                // For show tables selector
                 const option1 = document.createElement('option');
                 option1.value = table.name;
                 option1.textContent = table.name;
                 tableSelector.appendChild(option1);
                 
-                // For add data selector
                 const option2 = document.createElement('option');
                 option2.value = table.name;
                 option2.textContent = table.name;
@@ -590,12 +753,12 @@
             
             appState.schema.forEach(table => {
                 const tableElement = document.createElement('div');
-                tableElement.className = 'schema-table flex items-center space-x-3 py-2 px-3 rounded-lg text-gray-700 cursor-pointer';
+                tableElement.className = 'schema-table flex items-center space-x-3 py-2 px-3 rounded-lg text-slate-200 cursor-pointer';
                 tableElement.innerHTML = `
-                    <i class="fas fa-table w-5 text-gray-400"></i>
+                    <i class="fas fa-table w-5 text-slate-400"></i>
                     <div>
                         <div class="font-medium">${table.name}</div>
-                        <div class="text-xs text-gray-500">${table.columns.length} columns</div>
+                        <div class="text-xs text-slate-500">${table.columns.length} columns</div>
                     </div>
                 `;
                 
@@ -611,13 +774,11 @@
 
         // Switch between tabs
         function switchTab(tab) {
-            // Update sidebar active state
             document.querySelectorAll('.sidebar-item').forEach(item => {
                 item.classList.remove('active');
             });
             document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
             
-            // Show/hide sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.add('hidden');
             });
@@ -631,8 +792,8 @@
             }
         }
 
-        // Load table data
-        function loadTableData() {
+        // Load table data from API
+        async function loadTableData() {
             const tableName = tableSelector.value;
             
             if (!tableName) {
@@ -640,23 +801,28 @@
                 return;
             }
             
-            // Show loading state
             loadTableDataBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
             loadTableDataBtn.disabled = true;
             tableDataContainer.innerHTML = `
-                <div class="bg-gray-50 p-8 text-center text-gray-500">
+                <div class="bg-slate-800 p-8 text-center text-slate-400">
                     <i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i>
                     Loading table data...
                 </div>
             `;
             
-            // Simulate loading delay
-            setTimeout(() => {
-                const tableData = appState.tableData[tableName];
+            try {
+                const response = await fetch(`${API_BASE_URL}/tables/${tableName}`);
                 
-                if (!tableData || tableData.rows.length === 0) {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch data for table: ${tableName}`);
+                }
+                
+                const tableData = await response.json();
+                appState.tableData[tableName] = tableData;
+                
+                if (!tableData.rows || tableData.rows.length === 0) {
                     tableDataContainer.innerHTML = `
-                        <div class="bg-gray-50 p-8 text-center text-gray-500">
+                        <div class="bg-slate-800 p-8 text-center text-slate-400">
                             <i class="fas fa-inbox text-2xl mb-2 block"></i>
                             No data found in this table
                         </div>
@@ -665,10 +831,19 @@
                     renderTableData(tableName, tableData);
                 }
                 
-                // Reset button state
+            } catch (error) {
+                console.error('Error loading table data:', error);
+                tableDataContainer.innerHTML = `
+                    <div class="bg-slate-800 p-8 text-center text-slate-400">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-2 block"></i>
+                        Failed to load data. Please try again.
+                    </div>
+                `;
+                showMessage('Failed to load table data. Please check your API connection.', 'error');
+            } finally {
                 loadTableDataBtn.innerHTML = '<i class="fas fa-sync-alt mr-2"></i>Load Data';
                 loadTableDataBtn.disabled = false;
-            }, 800);
+            }
         }
 
         // Render table data
@@ -676,26 +851,25 @@
             let html = `
                 <div class="overflow-x-auto">
                     <table class="w-full">
-                        <thead class="bg-gray-50">
+                        <thead class="table-header">
                             <tr>
             `;
             
-            // Table headers
             tableData.columns.forEach(column => {
-                html += `<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${column}</th>`;
+                html += `<th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">${column}</th>`;
             });
             
             html += `
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
+                        <tbody class="divide-y divide-slate-700">
             `;
             
-            // Table rows
             tableData.rows.forEach(row => {
                 html += `<tr class="table-row">`;
                 tableData.columns.forEach(column => {
-                    html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row[column]}</td>`;
+                    const value = row[column] !== null && row[column] !== undefined ? row[column] : 'NULL';
+                    html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300 table-cell">${value}</td>`;
                 });
                 html += `</tr>`;
             });
@@ -704,8 +878,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 text-right text-sm text-gray-500">
-                    Showing ${tableData.rows.length} records
+                <div class="bg-slate-800 px-4 py-3 text-right text-sm text-slate-400 border-t border-slate-700">
+                    Showing ${tableData.rows.length} records from ${tableName}
                 </div>
             `;
             
@@ -733,10 +907,10 @@
             submitDataContainer.classList.add('hidden');
             
             const formSection = document.createElement('div');
-            formSection.className = 'p-4 border border-gray-200 rounded-lg';
+            formSection.className = 'p-4 border border-slate-700 rounded-lg';
             formSection.innerHTML = `
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">Add New Record to ${tableName}</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="data-entry-form">
+                <h3 class="text-lg font-semibold text-slate-200 mb-3">Add New Record to ${tableName}</h3>
+                <div id="data-entry-form">
                     <!-- Form fields will be generated here -->
                 </div>
             `;
@@ -744,31 +918,63 @@
             const formContainer = formSection.querySelector('#data-entry-form');
             
             table.columns.forEach(column => {
-                // Skip ID field as it's usually auto-generated
-                if (column === 'id') return;
+                // Skip auto-increment ID fields
+                if (column.includes('_id') && (column === 'user_id' || column === 'driver_id' || column === 'vehicle_id' || 
+                    column === 'ride_id' || column === 'method_id' || column === 'payment_id' || column === 'rating_id' || 
+                    column === 'cash_id')) {
+                    return;
+                }
+                
+                // Skip composite key fields for junction tables
+                if ((tableName === 'books' || tableName === 'driver_vehicle') && column.includes('_id')) {
+                    return;
+                }
                 
                 const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'form-group';
                 
-                // Determine input type based on column name
                 let inputType = 'text';
                 let placeholder = `Enter ${column}`;
+                let required = true;
                 
-                if (column.includes('date')) {
-                    inputType = 'date';
-                } else if (column.includes('salary') || column.includes('budget') || column.includes('amount') || column.includes('price')) {
+                // Handle optional fields
+                if (column.includes('phone_number') || column.includes('description') || 
+                    column.includes('comments') || column.includes('type') || 
+                    column === 'pickup' || column === 'drop_location' || column === 'status' ||
+                    column === 'expiry' || column === 'name' || column === 'score') {
+                    required = false;
+                    placeholder += ' (optional)';
+                }
+                
+                // Set specific input types
+                if (column.includes('date') || column === 'expiry' || column === 'created_at') {
+                    inputType = 'datetime-local';
+                } else if (column.includes('amount') || column.includes('price') || column.includes('unit_price')) {
                     inputType = 'number';
-                    placeholder = `Enter ${column} (numeric)`;
+                    placeholder += ' (numeric)';
                 } else if (column.includes('email')) {
                     inputType = 'email';
+                } else if (column.includes('score') || column === 'method_id') {
+                    inputType = 'number';
+                } else if (column === 'card_no') {
+                    inputType = 'text';
+                    placeholder = 'Enter card number (e.g., 4111-1111-1111-1111)';
+                } else if (column === 'phone_number') {
+                    inputType = 'tel';
+                    placeholder = 'Enter phone number';
                 }
                 
                 fieldDiv.innerHTML = `
-                    <label class="block text-sm font-medium text-gray-700 mb-1">${column}</label>
+                    <label class="form-label">
+                        ${column} 
+                        ${!required ? '<span class="text-slate-500 text-xs">(optional)</span>' : ''}
+                    </label>
                     <input type="${inputType}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition" 
+                           class="form-input" 
                            data-column="${column}"
                            placeholder="${placeholder}"
-                           ${inputType === 'number' ? 'step="0.01"' : ''}>
+                           ${inputType === 'number' ? 'step="0.01"' : ''}
+                           ${required ? 'required' : ''}>
                 `;
                 formContainer.appendChild(fieldDiv);
             });
@@ -777,8 +983,8 @@
             submitDataContainer.classList.remove('hidden');
         }
 
-        // Submit data to the table
-        function submitData() {
+        // Submit data to the API
+        async function submitData() {
             const tableName = appState.selectedTable;
             
             if (!tableName) {
@@ -786,66 +992,89 @@
                 return;
             }
             
-            // Collect form data
             const formData = {};
             const inputs = document.querySelectorAll('#data-entry-form input');
             let isValid = true;
+            const errors = [];
             
             inputs.forEach(input => {
                 const column = input.getAttribute('data-column');
                 const value = input.value.trim();
+                const isRequired = input.hasAttribute('required');
                 
-                if (!value) {
+                if (isRequired && !value) {
                     isValid = false;
+                    errors.push(`${column} is required`);
                     input.classList.add('border-red-500');
                 } else {
                     input.classList.remove('border-red-500');
                     
-                    // Convert value based on input type
-                    if (input.type === 'number') {
-                        formData[column] = parseFloat(value);
-                    } else {
-                        formData[column] = value;
+                    if (value) {
+                        if (input.type === 'number') {
+                            formData[column] = parseFloat(value);
+                            if (isNaN(formData[column])) {
+                                isValid = false;
+                                errors.push(`${column} must be a valid number`);
+                                input.classList.add('border-red-500');
+                            }
+                        } else if (input.type === 'datetime-local') {
+                            formData[column] = new Date(value).toISOString();
+                        } else {
+                            formData[column] = value;
+                        }
                     }
                 }
             });
             
             if (!isValid) {
-                showMessage('Please fill in all fields', 'error');
+                showMessage(`Please fix the following errors: ${errors.join(', ')}`, 'error');
                 return;
             }
             
-            // Show loading state
             submitDataBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Adding...';
             submitDataBtn.disabled = true;
             
-            // Simulate API call delay
-            setTimeout(() => {
-                // Generate a new ID (in a real app, this would be handled by the database)
-                const tableData = appState.tableData[tableName];
-                const newId = tableData.rows.length > 0 
-                    ? Math.max(...tableData.rows.map(row => row.id)) + 1 
-                    : 1;
+            try {
+                console.log('Submitting data to:', `${API_BASE_URL}/tables/${tableName}`);
+                console.log('Data:', formData);
                 
-                // Add the new record
-                const newRecord = { id: newId, ...formData };
-                tableData.rows.push(newRecord);
+                const response = await fetch(`${API_BASE_URL}/tables/${tableName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
                 
-                // Reset form
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server responded with ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.json();
+                console.log('Success:', result);
+                
                 inputs.forEach(input => {
                     input.value = '';
                 });
                 
-                // Show success message
-                showMessage(`Data added successfully to ${tableName} table!`, 'success');
+                showMessage(`Record added successfully to ${tableName} table!`, 'success');
                 
-                // Update stats
-                updateRandomStats();
+                if (tableSelector.value === tableName) {
+                    setTimeout(() => {
+                        loadTableData();
+                    }, 1000);
+                }
                 
-                // Reset button state
-                submitDataBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Add Data';
+            } catch (error) {
+                console.error('Error adding record:', error);
+                showMessage(`Failed to add record: ${error.message}`, 'error');
+            } finally {
+                submitDataBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Add Record';
                 submitDataBtn.disabled = false;
-            }, 1000);
+            }
         }
 
         // Show analytics form based on selected type
@@ -855,33 +1084,32 @@
             
             if (type === 'forecast') {
                 analyticsFormsContainer.innerHTML = `
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Budget Forecast</h3>
+                    <h3 class="text-lg font-semibold text-slate-200 mb-3">Budget Forecast</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Expense Table</label>
-                            <select id="expenseTable" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Select Expense Table</label>
+                            <select id="expenseTable" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
                                 <option value="">-- Select table --</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Inflation Rate (%)</label>
-                            <input type="number" id="inflationRate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition" value="3" min="0" max="50" step="0.1">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Inflation Rate (%)</label>
+                            <input type="number" id="inflationRate" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" value="3" min="0" max="50" step="0.1">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Years to Forecast</label>
-                            <input type="number" id="forecastYears" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition" value="3" min="1" max="10">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Years to Forecast</label>
+                            <input type="number" id="forecastYears" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" value="3" min="1" max="10">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Amount Column</label>
-                            <input type="text" id="amountColumn" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition" placeholder="e.g., amount" value="amount">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Amount Column</label>
+                            <input type="text" id="amountColumn" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" placeholder="e.g., amount" value="amount">
                         </div>
                     </div>
-                    <button id="runForecastBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    <button id="runForecastBtn" class="btn-primary text-white font-medium px-4 py-2 rounded-lg">
                         <i class="fas fa-calculator mr-2"></i>Run Forecast
                     </button>
                 `;
                 
-                // Populate table selector
                 const expenseTableSelect = document.getElementById('expenseTable');
                 expenseTableSelect.innerHTML = '<option value="">-- Select table --</option>';
                 appState.schema.forEach(table => {
@@ -895,36 +1123,35 @@
                 
             } else if (type === 'topN') {
                 analyticsFormsContainer.innerHTML = `
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Top/Bottom N Analysis</h3>
+                    <h3 class="text-lg font-semibold text-slate-200 mb-3">Top/Bottom N Analysis</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Table</label>
-                            <select id="analysisTable" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Select Table</label>
+                            <select id="analysisTable" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
                                 <option value="">-- Select table --</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Performance Column</label>
-                            <input type="text" id="performanceColumn" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition" placeholder="e.g., rating, score" value="rating">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Performance Column</label>
+                            <input type="text" id="performanceColumn" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" placeholder="e.g., rating, score" value="amount">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Number of Results (N)</label>
-                            <input type="number" id="resultCount" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition" value="5" min="1" max="50">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Number of Results (N)</label>
+                            <input type="number" id="resultCount" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" value="5" min="1" max="50">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Analysis Type</label>
-                            <select id="analysisType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Analysis Type</label>
+                            <select id="analysisType" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
                                 <option value="top">Top N (Best)</option>
                                 <option value="bottom">Bottom N (Worst)</option>
                             </select>
                         </div>
                     </div>
-                    <button id="runTopNBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    <button id="runTopNBtn" class="btn-primary text-white font-medium px-4 py-2 rounded-lg">
                         <i class="fas fa-chart-bar mr-2"></i>Run Analysis
                     </button>
                 `;
                 
-                // Populate table selector
                 const analysisTableSelect = document.getElementById('analysisTable');
                 analysisTableSelect.innerHTML = '<option value="">-- Select table --</option>';
                 appState.schema.forEach(table => {
@@ -938,12 +1165,12 @@
                 
             } else if (type === 'custom') {
                 analyticsFormsContainer.innerHTML = `
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Custom SQL Query</h3>
+                    <h3 class="text-lg font-semibold text-slate-200 mb-3">Custom SQL Query</h3>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Enter SQL Query</label>
-                        <textarea id="customQuery" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition" rows="5" placeholder="SELECT * FROM table_name"></textarea>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Enter SQL Query</label>
+                        <textarea id="customQuery" class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" rows="5" placeholder="SELECT * FROM table_name"></textarea>
                     </div>
-                    <button id="runCustomQueryBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    <button id="runCustomQueryBtn" class="btn-primary text-white font-medium px-4 py-2 rounded-lg">
                         <i class="fas fa-play mr-2"></i>Run Query
                     </button>
                 `;
@@ -953,251 +1180,37 @@
         }
 
         // Run budget forecast analysis
-        function runBudgetForecast() {
-            const tableName = document.getElementById('expenseTable').value;
-            const inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
-            const years = parseInt(document.getElementById('forecastYears').value);
-            const amountColumn = document.getElementById('amountColumn').value;
-            
-            if (!tableName || !amountColumn) {
-                showMessage('Please fill in all required fields', 'error');
-                return;
-            }
-            
-            // Show loading state
-            const button = document.getElementById('runForecastBtn');
-            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Calculating...';
-            button.disabled = true;
-            
-            // Simulate processing delay
-            setTimeout(() => {
-                const tableData = appState.tableData[tableName];
-                let currentTotal = 0;
-                
-                if (tableData && tableData.rows.length > 0) {
-                    currentTotal = tableData.rows.reduce((sum, row) => {
-                        return sum + (parseFloat(row[amountColumn]) || 0);
-                    }, 0);
-                } else {
-                    // If no data, use a random value
-                    currentTotal = Math.floor(Math.random() * 100000) + 50000;
-                }
-                
-                const currentYear = new Date().getFullYear();
-                const forecast = [];
-                let yearlyAmount = currentTotal;
-                
-                for (let i = 1; i <= years; i++) {
-                    yearlyAmount *= (1 + inflationRate);
-                    forecast.push({
-                        year: currentYear + i,
-                        amount: yearlyAmount
-                    });
-                }
-                
-                // Display results
-                analyticsResultsContent.innerHTML = `
-                    <h4 class="font-semibold text-gray-800 mb-2">Budget Forecast Results</h4>
-                    <p class="mb-4">Based on current total of $${currentTotal.toFixed(2)} and ${(inflationRate * 100).toFixed(1)}% inflation rate:</p>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Year</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Forecasted Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                ${forecast.map(item => `
-                                    <tr>
-                                        <td class="px-4 py-2">${item.year}</td>
-                                        <td class="px-4 py-2">$${item.amount.toFixed(2)}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
-                        <p class="text-sm text-blue-700"><strong>Note:</strong> This is a simplified forecast. Actual results may vary based on additional factors.</p>
-                    </div>
-                `;
-                
-                analyticsResultsContainer.classList.remove('hidden');
-                
-                // Reset button state
-                button.innerHTML = '<i class="fas fa-calculator mr-2"></i>Run Forecast';
-                button.disabled = false;
-            }, 1200);
+        async function runBudgetForecast() {
+            // Implementation for budget forecast
+            showMessage('Budget forecast analysis would be implemented here', 'info');
         }
 
         // Run Top N analysis
-        function runTopNAnalysis() {
-            const tableName = document.getElementById('analysisTable').value;
-            const performanceColumn = document.getElementById('performanceColumn').value;
-            const resultCount = parseInt(document.getElementById('resultCount').value);
-            const analysisType = document.getElementById('analysisType').value;
-            
-            if (!tableName || !performanceColumn) {
-                showMessage('Please fill in all required fields', 'error');
-                return;
-            }
-            
-            // Show loading state
-            const button = document.getElementById('runTopNBtn');
-            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Analyzing...';
-            button.disabled = true;
-            
-            // Simulate processing delay
-            setTimeout(() => {
-                const tableData = appState.tableData[tableName];
-                let results = [];
-                
-                if (tableData && tableData.rows.length > 0) {
-                    // Use actual data if available
-                    results = tableData.rows.map(row => {
-                        return {
-                            name: row.name || `Item ${row.id}`,
-                            score: parseFloat(row[performanceColumn]) || 0
-                        };
-                    }).filter(item => !isNaN(item.score));
-                } else {
-                    // Generate mock results if no data
-                    results = Array.from({length: resultCount}, (_, i) => {
-                        return {
-                            name: `Item ${i+1}`,
-                            score: analysisType === 'top' ? 
-                                (Math.random() * 20 + 80).toFixed(1) : 
-                                (Math.random() * 30 + 50).toFixed(1)
-                        };
-                    });
-                }
-                
-                // Sort results
-                results.sort((a, b) => {
-                    if (analysisType === 'top') {
-                        return parseFloat(b.score) - parseFloat(a.score);
-                    } else {
-                        return parseFloat(a.score) - parseFloat(b.score);
-                    }
-                });
-                
-                // Take only the requested number of results
-                results = results.slice(0, resultCount);
-                
-                // Display results
-                analyticsResultsContent.innerHTML = `
-                    <h4 class="font-semibold text-gray-800 mb-2">${analysisType === 'top' ? 'Top' : 'Bottom'} ${resultCount} Results</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Rank</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">${performanceColumn}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                ${results.map((item, index) => `
-                                    <tr>
-                                        <td class="px-4 py-2">${index + 1}</td>
-                                        <td class="px-4 py-2">${item.name}</td>
-                                        <td class="px-4 py-2">${item.score}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                
-                analyticsResultsContainer.classList.remove('hidden');
-                
-                // Reset button state
-                button.innerHTML = '<i class="fas fa-chart-bar mr-2"></i>Run Analysis';
-                button.disabled = false;
-            }, 1000);
+        async function runTopNAnalysis() {
+            // Implementation for Top N analysis
+            showMessage('Top N analysis would be implemented here', 'info');
         }
 
         // Run custom query
-        function runCustomQuery() {
-            const query = document.getElementById('customQuery').value;
-            
-            if (!query) {
-                showMessage('Please enter a SQL query', 'error');
-                return;
-            }
-            
-            // Show loading state
-            const button = document.getElementById('runCustomQueryBtn');
-            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Running...';
-            button.disabled = true;
-            
-            // Simulate processing delay
-            setTimeout(() => {
-                // For demo purposes, we'll just show a sample result
-                // In a real app, this would execute the query against the database
-                const result = {
-                    columns: ['id', 'name', 'value'],
-                    rows: Array.from({length: 5}, (_, i) => ({
-                        id: i + 1,
-                        name: `Result ${i+1}`,
-                        value: (Math.random() * 100).toFixed(2)
-                    }))
-                };
-                
-                // Display results
-                let html = `
-                    <h4 class="font-semibold text-gray-800 mb-2">Query Results</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                `;
-                
-                // Table headers
-                result.columns.forEach(column => {
-                    html += `<th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">${column}</th>`;
-                });
-                
-                html += `
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                `;
-                
-                // Table rows
-                result.rows.forEach(row => {
-                    html += `<tr>`;
-                    result.columns.forEach(column => {
-                        html += `<td class="px-4 py-2">${row[column]}</td>`;
-                    });
-                    html += `</tr>`;
-                });
-                
-                html += `
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                
-                analyticsResultsContent.innerHTML = html;
-                analyticsResultsContainer.classList.remove('hidden');
-                
-                // Reset button state
-                button.innerHTML = '<i class="fas fa-play mr-2"></i>Run Query';
-                button.disabled = false;
-            }, 800);
+        async function runCustomQuery() {
+            // Implementation for custom query
+            showMessage('Custom query execution would be implemented here', 'info');
         }
 
         // Show message in modal
         function showMessage(message, type) {
             if (type === 'success') {
                 modalTitle.textContent = 'Success';
-                modalMessage.className = 'mb-4 p-4 rounded-lg bg-green-100 text-green-800 border border-green-200';
+                modalMessage.className = 'mb-4 p-4 rounded-lg bg-green-900/30 text-green-400 border border-green-800/50';
                 modalMessage.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
-            } else {
+            } else if (type === 'error') {
                 modalTitle.textContent = 'Error';
-                modalMessage.className = 'mb-4 p-4 rounded-lg bg-red-100 text-red-800 border border-red-200';
+                modalMessage.className = 'mb-4 p-4 rounded-lg bg-red-900/30 text-red-400 border border-red-800/50';
                 modalMessage.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>${message}`;
+            } else {
+                modalTitle.textContent = 'Info';
+                modalMessage.className = 'mb-4 p-4 rounded-lg bg-blue-900/30 text-blue-400 border border-blue-800/50';
+                modalMessage.innerHTML = `<i class="fas fa-info-circle mr-2"></i>${message}`;
             }
             
             messageModal.style.display = 'flex';
