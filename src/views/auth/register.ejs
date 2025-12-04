@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - RideShare Admin</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .message-box {
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <div class="min-h-screen flex flex-col lg:flex-row">
+        <!-- Left Side - Brand Section -->
+        <div class="lg:w-1/2 gradient-bg p-8 lg:p-12 flex flex-col justify-between text-white">
+            <!-- Header -->
+            <div class="flex items-center space-x-3 mb-8 lg:mb-0">
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                    <i class="fas fa-user-plus text-white text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold">RideShare Admin</h1>
+            </div>
+
+            <!-- Hero Content -->
+            <div class="max-w-lg mx-auto lg:mx-0">
+                <div class="mb-8">
+                    <h2 class="text-4xl lg:text-5xl font-bold mb-4">Join Our<br>Admin Team</h2>
+                    <p class="text-indigo-100 text-lg leading-relaxed">
+                        Create your administrator account to manage the ride-sharing platform efficiently.
+                    </p>
+                </div>
+
+                <!-- Benefits -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-4 p-3 rounded-lg bg-white/10 backdrop-blur-sm">
+                        <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-indigo-200"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Secure Access</h3>
+                            <p class="text-indigo-100 text-sm">Protected with JWT authentication</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 p-3 rounded-lg bg-white/10 backdrop-blur-sm">
+                        <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-database text-indigo-200"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Full Database Access</h3>
+                            <p class="text-indigo-100 text-sm">Manage all platform data</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 p-3 rounded-lg bg-white/10 backdrop-blur-sm">
+                        <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-indigo-200"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Analytics & Reports</h3>
+                            <p class="text-indigo-100 text-sm">Data insights at your fingertips</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Text -->
+            <div class="mt-8 lg:mt-0 text-center lg:text-left">
+                <p class="text-indigo-200 text-sm">Trusted by platform administrators worldwide</p>
+            </div>
+        </div>
+
+        <!-- Right Side - Registration Form -->
+        <div class="lg:w-1/2 flex items-center justify-center p-8 lg:p-12">
+            <div class="w-full max-w-md animate-fadeIn">
+                <!-- Mobile Header -->
+                <div class="lg:hidden flex items-center justify-center space-x-3 mb-8">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-plus text-white text-xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900">RideShare</h1>
+                </div>
+
+                <!-- Form Container -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 lg:p-10 border border-gray-100">
+                    <!-- Header -->
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
+                        <p class="text-gray-500">Register as an administrator</p>
+                    </div>
+
+                    <!-- Error/Success Message Container -->
+                    <div id="messageContainer" class="mb-6 hidden"></div>
+
+                    <!-- Registration Form -->
+                    <form id="registerForm" class="space-y-5">
+                        <!-- Name Field -->
+                        <div class="space-y-2">
+                            <label for="name" class="text-sm font-medium text-gray-700">Full Name</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input type="text" id="name" name="name" required placeholder="John Doe"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white">
+                            </div>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="space-y-2">
+                            <label for="email" class="text-sm font-medium text-gray-700">Email Address</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-400"></i>
+                                </div>
+                                <input type="email" id="email" name="email" required placeholder="admin@rideshare.com"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white">
+                            </div>
+                        </div>
+
+                        <!-- Phone Field -->
+                        <div class="space-y-2">
+                            <label for="phone_number" class="text-sm font-medium text-gray-700">Phone Number <span
+                                    class="text-gray-400 font-normal">(optional)</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-phone text-gray-400"></i>
+                                </div>
+                                <input type="tel" id="phone_number" name="phone_number" placeholder="+1 (555) 000-0000"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white">
+                            </div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="space-y-2">
+                            <label for="password" class="text-sm font-medium text-gray-700">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="password" id="password" name="password" required placeholder="••••••••"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white">
+                            </div>
+                            <p class="text-xs text-gray-500">Must be at least 6 characters</p>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit"
+                            class="w-full btn-primary text-white font-semibold py-3.5 rounded-xl shadow-lg">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            Create Account
+                        </button>
+                    </form>
+
+                    <!-- Sign In Link -->
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">
+                            Already have an account?
+                            <a href="/auth/login"
+                                class="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200">
+                                Sign in
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-8 text-center text-xs text-gray-500 space-y-2">
+                    <p>&copy; 2024 RideShare. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMessage(message, type) {
+            const container = document.getElementById('messageContainer');
+            container.classList.remove('hidden');
+
+            if (type === 'success') {
+                container.innerHTML = `
+                    <div class="message-box p-4 bg-green-50 border border-green-200 rounded-xl flex items-start space-x-3">
+                        <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-check text-green-600 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-green-800">${message}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="message-box p-4 bg-red-50 border border-red-200 rounded-xl flex items-start space-x-3">
+                        <div class="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-exclamation text-red-600 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-red-800">${message}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function hideMessage() {
+            const container = document.getElementById('messageContainer');
+            container.classList.add('hidden');
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            hideMessage();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const phone_number = document.getElementById('phone_number').value.trim();
+            const button = document.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+
+            // Client-side validation
+            if (!name || !email || !password) {
+                showMessage('Please fill in all required fields', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters long', 'error');
+                return;
+            }
+
+            // Add loading state
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating Account...';
+            button.disabled = true;
+
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password, phone_number })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token
+                    localStorage.setItem('rideSharingToken', data.token);
+
+                    // Show success message
+                    showMessage('Account created successfully! Redirecting to dashboard...', 'success');
+
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    // Show error
+                    const errorMsg = data.error || data.errors?.map(e => e.msg).join(', ') || 'Registration failed';
+                    showMessage(errorMsg, 'error');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showMessage('An error occurred during registration. Please try again.', 'error');
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

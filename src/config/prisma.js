@@ -1,14 +1,26 @@
 import { PrismaClient } from '@prisma/client';
-// import { MariaDBAdapter } from '@prisma/adapter-mariadb';
-// import { connect } from '@planetscale/database';
 
-// const connection = connect({
-//   host: process.env.DB_HOST,
-//   username: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-// });
+// Configure Prisma Client with logging for development
+const prisma = new PrismaClient({
+    log: process.env.NODE_ENV === 'development'
+        ? ['query', 'info', 'warn', 'error']
+        : ['warn', 'error'],
+});
 
-// const adapter = new MariaDBAdapter(connection);
-const prisma = new PrismaClient() ;
+// Test database connection on startup
+prisma.$connect()
+    .then(() => {
+        console.log('✅ Database connected successfully');
+    })
+    .catch((error) => {
+        console.error('❌ Database connection failed:', error);
+        process.exit(1);
+    });
+
+// Graceful shutdown
+process.on('beforeExit', async () => {
+    await prisma.$disconnect();
+    console.log('🔌 Database disconnected');
+});
 
 export default prisma;

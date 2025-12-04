@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         body {
             font-family: 'Inter', sans-serif;
         }
-        
+
         .gradient-bg {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             transition: all 0.3s ease;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
         }
-        
+
         .feature-card {
             transition: transform 0.3s ease;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .input-focus:focus {
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .animate-fadeIn {
             animation: fadeIn 0.5s ease-out;
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
     <div class="min-h-screen flex flex-col lg:flex-row">
         <!-- Left Side - Brand Section -->
@@ -66,7 +77,8 @@
                 <div class="mb-8">
                     <h2 class="text-4xl lg:text-5xl font-bold mb-4">Your Journey,<br>Simplified</h2>
                     <p class="text-indigo-100 text-lg leading-relaxed">
-                        Connect with reliable drivers and riders. Experience safe, affordable, and seamless transportation.
+                        Connect with reliable drivers and riders. Experience safe, affordable, and seamless
+                        transportation.
                     </p>
                 </div>
 
@@ -81,7 +93,7 @@
                             <p class="text-indigo-100 text-sm">Get matched with drivers in seconds</p>
                         </div>
                     </div>
-                    
+
                     <div class="feature-card flex items-center space-x-4 p-3 rounded-lg bg-white/10 backdrop-blur-sm">
                         <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                             <i class="fas fa-shield-alt text-green-300"></i>
@@ -91,7 +103,7 @@
                             <p class="text-indigo-100 text-sm">Verified drivers and real-time tracking</p>
                         </div>
                     </div>
-                    
+
                     <div class="feature-card flex items-center space-x-4 p-3 rounded-lg bg-white/10 backdrop-blur-sm">
                         <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                             <i class="fas fa-dollar-sign text-emerald-300"></i>
@@ -115,7 +127,8 @@
             <div class="w-full max-w-md animate-fadeIn">
                 <!-- Mobile Header -->
                 <div class="lg:hidden flex items-center justify-center space-x-3 mb-8">
-                    <div class="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl flex items-center justify-center">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl flex items-center justify-center">
                         <i class="fas fa-car text-white text-xl"></i>
                     </div>
                     <h1 class="text-2xl font-bold text-gray-900">RideShare</h1>
@@ -129,108 +142,115 @@
                         <p class="text-gray-500">Sign in to continue your journey</p>
                     </div>
 
-                    <!-- Error Alert -->
-                    <% if (typeof error !== 'undefined' && error) { %>
+                    <!-- Error Alert (Server-side) -->
+                    <% if (typeof error !=='undefined' && error) { %>
                         <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start space-x-3">
-                            <div class="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <div
+                                class="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <i class="fas fa-exclamation text-red-600 text-xs"></i>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-red-800"><%= error %></p>
+                                <p class="text-sm font-medium text-red-800">
+                                    <%= error %>
+                                </p>
                             </div>
                         </div>
-                    <% } %>
+                        <% } %>
 
-                    <!-- Success Alert -->
-                    <% if (typeof success !== 'undefined' && success) { %>
-                        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start space-x-3">
-                            <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fas fa-check text-green-600 text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-green-800"><%= success %></p>
-                            </div>
-                        </div>
-                    <% } %>
-
-                    <!-- Login Form -->
-                    <form method="POST" action="/auth/login" class="space-y-6">
-                        <!-- Email Field -->
-                        <div class="space-y-2">
-                            <label for="email" class="text-sm font-medium text-gray-700">Email Address</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-envelope text-gray-400"></i>
+                            <!-- Success Alert (Server-side) -->
+                            <% if (typeof success !=='undefined' && success) { %>
+                                <div
+                                    class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start space-x-3">
+                                    <div
+                                        class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check text-green-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-green-800">
+                                            <%= success %>
+                                        </p>
+                                    </div>
                                 </div>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email" 
-                                    required 
-                                    placeholder="john@example.com"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white"
-                                    value="<%= typeof email !== 'undefined' ? email : '' %>">
-                            </div>
-                        </div>
+                                <% } %>
 
-                        <!-- Password Field -->
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <label for="password" class="text-sm font-medium text-gray-700">Password</label>
-                                <a href="/auth/forgot-password" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200">
-                                    Forgot password?
-                                </a>
-                            </div>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-lock text-gray-400"></i>
-                                </div>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password" 
-                                    required 
-                                    placeholder="••••••••"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white">
-                            </div>
-                        </div>
+                                    <!-- Dynamic Message Container (Client-side) -->
+                                    <div id="messageContainer" class="mb-6 hidden"></div>
 
-                        <!-- Remember Me -->
-                        <div class="flex items-center">
-                            <input 
-                                type="checkbox" 
-                                id="remember"
-                                name="remember" 
-                                class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                <%= typeof remember !== 'undefined' && remember ? 'checked' : '' %>>
-                            <label for="remember" class="ml-2 text-sm text-gray-600">Keep me signed in</label>
-                        </div>
+                                    <!-- Login Form -->
+                                    <form method="POST" action="/auth/login" class="space-y-6">
+                                        <!-- Email Field -->
+                                        <div class="space-y-2">
+                                            <label for="email" class="text-sm font-medium text-gray-700">Email
+                                                Address</label>
+                                            <div class="relative">
+                                                <div
+                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <i class="fas fa-envelope text-gray-400"></i>
+                                                </div>
+                                                <input type="email" id="email" name="email" required
+                                                    placeholder="john@example.com"
+                                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white"
+                                                    value="<%= typeof email !== 'undefined' ? email : '' %>">
+                                            </div>
+                                        </div>
 
-                        <!-- Submit Button -->
-                        <button 
-                            type="submit" 
-                            class="w-full btn-primary text-white font-semibold py-3.5 rounded-xl shadow-lg">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
-                            Sign In
-                        </button>
-                    </form>
+                                        <!-- Password Field -->
+                                        <div class="space-y-2">
+                                            <div class="flex items-center justify-between">
+                                                <label for="password"
+                                                    class="text-sm font-medium text-gray-700">Password</label>
+                                                <a href="/auth/forgot-password"
+                                                    class="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200">
+                                                    Forgot password?
+                                                </a>
+                                            </div>
+                                            <div class="relative">
+                                                <div
+                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <i class="fas fa-lock text-gray-400"></i>
+                                                </div>
+                                                <input type="password" id="password" name="password" required
+                                                    placeholder="••••••••"
+                                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl input-focus focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-white">
+                                            </div>
+                                        </div>
 
-                    <!-- Sign Up Link -->
-                    <div class="mt-8 text-center">
-                        <p class="text-gray-600">
-                            Don't have an account? 
-                            <a href="/auth/register" class="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200">
-                                Create one now
-                            </a>
-                        </p>
-                    </div>
+                                        <!-- Remember Me -->
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="remember" name="remember"
+                                                class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                                <%=typeof remember !=='undefined' && remember ? 'checked' : '' %>>
+                                            <label for="remember" class="ml-2 text-sm text-gray-600">Keep me signed
+                                                in</label>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <button type="submit"
+                                            class="w-full btn-primary text-white font-semibold py-3.5 rounded-xl shadow-lg">
+                                            <i class="fas fa-sign-in-alt mr-2"></i>
+                                            Sign In
+                                        </button>
+                                    </form>
+
+                                    <!-- Sign Up Link -->
+                                    <div class="mt-8 text-center">
+                                        <p class="text-gray-600">
+                                            Don't have an account?
+                                            <a href="/auth/register"
+                                                class="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200">
+                                                Create one now
+                                            </a>
+                                        </p>
+                                    </div>
                 </div>
 
                 <!-- Footer -->
                 <div class="mt-8 text-center text-xs text-gray-500 space-y-2">
                     <p>
-                        <a href="/terms" class="hover:text-gray-700 transition-colors duration-200">Terms of Service</a> • 
-                        <a href="/privacy" class="hover:text-gray-700 transition-colors duration-200">Privacy Policy</a> • 
+                        <a href="/terms" class="hover:text-gray-700 transition-colors duration-200">Terms of Service</a>
+                        •
+                        <a href="/privacy" class="hover:text-gray-700 transition-colors duration-200">Privacy Policy</a>
+                        •
                         <a href="/help" class="hover:text-gray-700 transition-colors duration-200">Help Center</a>
                     </p>
                     <p>&copy; 2024 RideShare. All rights reserved.</p>
@@ -240,30 +260,94 @@
     </div>
 
     <script>
-        // Simple form validation and loading state
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                e.preventDefault();
-                alert('Please fill in all fields');
-                return;
+        function showMessage(message, type) {
+            const container = document.getElementById('messageContainer');
+            container.classList.remove('hidden');
+
+            if (type === 'success') {
+                container.innerHTML = `
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-xl flex items-start space-x-3">
+                        <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-check text-green-600 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-green-800">${message}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start space-x-3">
+                        <div class="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-exclamation text-red-600 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-red-800">${message}</p>
+                        </div>
+                    </div>
+                `;
             }
-            
-            // Add loading state to button
+        }
+
+        function hideMessage() {
+            const container = document.getElementById('messageContainer');
+            container.classList.add('hidden');
+        }
+
+        document.querySelector('form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            hideMessage();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
             const button = document.querySelector('button[type="submit"]');
             const originalText = button.innerHTML;
-            
+
+            if (!email || !password) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Add loading state
             button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Signing In...';
             button.disabled = true;
-            
-            // Re-enable button after 5 seconds in case submission fails
-            setTimeout(() => {
+
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token
+                    localStorage.setItem('rideSharingToken', data.token);
+
+                    // Show success
+                    showMessage('Login successful! Redirecting...', 'success');
+
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1000);
+                } else {
+                    // Show error
+                    showMessage(data.error || 'Login failed', 'error');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('An error occurred during login. Please try again.', 'error');
                 button.innerHTML = originalText;
                 button.disabled = false;
-            }, 5000);
+            }
         });
     </script>
 </body>
+
 </html>
