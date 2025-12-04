@@ -270,11 +270,11 @@
         </div>
 
         <div class="px-4">
-            <button onclick="localStorage.removeItem('rideSharingToken'); window.location.href='/auth/logout'"
-                class="w-full flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
+            <a href="/auth/logout"
+                class="w-full flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-red-600 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="font-medium">Sign Out</span>
-            </button>
+            </a>
         </div>
     </div>
 
@@ -1160,15 +1160,26 @@
         const formContainer = formSection.querySelector('#data-entry-form');
 
         table.columns.forEach(column => {
-            // Skip auto-increment ID fields (but NOT for junction tables like books)
-            if (tableName !== 'books' && tableName !== 'driver_vehicle') {
-                if (column.includes('_id') && (column === 'user_id' || column === 'driver_id' || column === 'vehicle_id' ||
-                    column === 'ride_id' || column === 'method_id' || column === 'payment_id' || column === 'rating_id' ||
-                    column === 'cash_id')) {
-                    return;
-                }
+            // Define which columns are auto-increment primary keys that should be skipped
+            const autoIncrementPKs = {
+                'user': 'user_id',
+                'driver': 'driver_id',
+                'vehicle': 'vehicle_id',
+                'ride': 'ride_id',
+                'payment_method': 'method_id',
+                'payment': 'payment_id',
+                'rating': 'rating_id',
+                'cash': 'cash_id'
+                // card uses card_no (string) as PK - don't skip
+                // books and driver_vehicle use composite PKs - don't skip
+            };
+
+            // Skip only if this column is the auto-increment PK for this table
+            if (autoIncrementPKs[tableName] === column) {
+                return; // Skip this auto-increment primary key
             }
 
+            // All other columns (including foreign keys) should be shown
             const fieldDiv = document.createElement('div');
             fieldDiv.className = 'form-group';
 
@@ -1180,46 +1191,160 @@
             if (column.includes('phone_number') || column.includes('description') ||
                 column.includes('comments') || column.includes('type') ||
                 column === 'pickup' || column === 'drop_location' || column === 'status' ||
-                column === 'expiry' || column === 'name' || column === 'score') {
+                column === 'expiry' || column === 'name' || column === 'score' ||
+                column === 'driver_id' || column === 'vehicle_id') {
                 required = false;
                 placeholder += ' (optional)';
             }
 
-            // Set specific input types
-            if (column.includes('date') || column === 'expiry' || column === 'created_at') {
-                inputType = 'datetime-local';
-            } else if (column.includes('amount') || column.includes('price') || column.includes('unit_price')) {
-                inputType = 'number';
-                placeholder += ' (numeric)';
-            } else if (column.includes('email')) {
-                inputType = 'email';
-            } else if (column.includes('score') || column === 'method_id') {
-                inputType = 'number';
-            } else if (column === 'card_no') {
-                inputType = 'text';
-                placeholder = 'Enter card number (e.g., 4111-1111-1111-1111)';
-            } else if (column === 'phone_number') {
-                inputType = 'tel';
-                placeholder = 'Enter phone number';
+            // Check if this is a foreign key field
+            const isForeignKey = column.includes('_id') && column !== 'cash_id' && column !== 'rating_id' && column !== 'payment_id';
+
+            if (isForeignKey) {
+                // Determine the referenced table
+                let refTable = '';
+                if (column === 'user_id') refTable = 'user';
+                else if (column === 'driver_id') refTable = 'driver';
+                else if (column === 'vehicle_id') refTable = 'vehicle';
+                else if (column === 'ride_id') refTable = 'ride';
+                else if (column === 'method_id') refTable = 'payment_method';
+
+                // Create dropdown for foreign keys
+                fieldDiv.innerHTML = `
+                    <label class="form-label">
+                        ${column} 
+                        ${!required ? '<span class="text-gray-400 font-normal text-xs ml-1">(optional)</span>' : ''}
+                        <span class="text-xs text-indigo-600 ml-1">(Foreign Key → ${refTable})</span>
+                    </label>
+                    <select class="form-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                            data-column="${column}"
+                            data-ref-table="${refTable}"
+                            ${required ? 'required' : ''}>
+                        <option value="">Select ${refTable}...</option>
+                        <option value="loading">Loading ${refTable} data...</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Select an existing ${refTable} record</p>
+                `;
+
+                // Load foreign key options asynchronously
+                loadForeignKeyOptions(refTable, column);
+            } else {
+                // Set specific input types for non-foreign-key fields
+                if (column.includes('date') || column === 'expiry' || column === 'created_at') {
+                    inputType = 'datetime-local';
+                } else if (column.includes('amount') || column.includes('price') || column.includes('unit_price') || column.includes('distance') || column.includes('duration')) {
+                    inputType = 'number';
+                    placeholder += ' (numeric)';
+                } else if (column.includes('email')) {
+                    inputType = 'email';
+                } else if (column.includes('score')) {
+                    inputType = 'number';
+                    placeholder = 'Enter rating (1-5)';
+                } else if (column === 'card_no') {
+                    inputType = 'text';
+                    placeholder = 'Enter card number (e.g., 4111-1111-1111-1111)';
+                } else if (column === 'phone_number') {
+                    inputType = 'tel';
+                    placeholder = 'Enter phone number';
+                } else if (column === 'method_type') {
+                    // Special handling for payment method type
+                    fieldDiv.innerHTML = `
+                        <label class="form-label">
+                            ${column}
+                        </label>
+                        <select class="form-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                                data-column="${column}"
+                                required>
+                            <option value="">Select method type...</option>
+                            <option value="card">Card</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Choose payment method type</p>
+                    `;
+                    formContainer.appendChild(fieldDiv);
+                    return;
+                }
+
+                fieldDiv.innerHTML = `
+                    <label class="form-label">
+                        ${column} 
+                        ${!required ? '<span class="text-gray-400 font-normal text-xs ml-1">(optional)</span>' : ''}
+                    </label>
+                    <input type="${inputType}" 
+                           class="form-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                           data-column="${column}"
+                           placeholder="${placeholder}"
+                           ${inputType === 'number' ? 'step="0.01"' : ''}
+                           ${inputType === 'number' && column === 'score' ? 'min="1" max="5"' : ''}
+                           ${required ? 'required' : ''}>
+                `;
             }
 
-            fieldDiv.innerHTML = `
-                <label class="form-label">
-                    ${column} 
-                    ${!required ? '<span class="text-gray-400 font-normal text-xs ml-1">(optional)</span>' : ''}
-                </label>
-                <input type="${inputType}" 
-                       class="form-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
-                       data-column="${column}"
-                       placeholder="${placeholder}"
-                       ${inputType === 'number' ? 'step="0.01"' : ''}
-                       ${required ? 'required' : ''}>
-            `;
             formContainer.appendChild(fieldDiv);
         });
 
         dataFormContainer.appendChild(formSection);
         submitDataContainer.classList.remove('hidden');
+    }
+
+    // Load foreign key options for dropdowns
+    async function loadForeignKeyOptions(refTable, columnName) {
+        try {
+            const response = await fetchWithAuth(`${API_BASE_URL}/tables/${refTable}`);
+            if (!response.ok) throw new Error('Failed to load reference data');
+
+            const data = await response.json();
+            const select = document.querySelector(`select[data-column="${columnName}"]`);
+
+            if (!select) return;
+
+            // Clear loading option
+            select.innerHTML = `<option value="">Select ${refTable}...</option>`;
+
+            // Determine which columns to display
+            let idColumn = refTable + '_id';
+            let displayColumn = 'name';
+
+            if (refTable === 'ride') {
+                idColumn = 'ride_id';
+                displayColumn = 'description';
+            } else if (refTable === 'payment_method') {
+                idColumn = 'method_id';
+                displayColumn = 'method_type';
+            }
+
+            // Add options
+            data.rows.forEach(row => {
+                const option = document.createElement('option');
+                option.value = row[idColumn];
+
+                // Create descriptive label
+                let label = `ID: ${row[idColumn]}`;
+                if (row[displayColumn]) {
+                    label += ` - ${row[displayColumn]}`;
+                }
+                if (row.email) {
+                    label += ` (${row.email})`;
+                }
+
+                option.textContent = label;
+                select.appendChild(option);
+            });
+
+            // If no records found
+            if (data.rows.length === 0) {
+                select.innerHTML = `<option value="">No ${refTable} records found</option>`;
+                select.disabled = true;
+            }
+
+        } catch (error) {
+            console.error(`Error loading ${refTable} options:`, error);
+            const select = document.querySelector(`select[data-column="${columnName}"]`);
+            if (select) {
+                select.innerHTML = `<option value="">Error loading ${refTable} data</option>`;
+                select.disabled = true;
+            }
+        }
     }
 
     // Submit data to the API
@@ -1232,7 +1357,7 @@
         }
 
         const formData = {};
-        const inputs = document.querySelectorAll('#data-entry-form input');
+        const inputs = document.querySelectorAll('#data-entry-form input, #data-entry-form select');
         let isValid = true;
         const errors = [];
 
@@ -1249,12 +1374,22 @@
                 input.classList.remove('border-red-500');
 
                 if (value) {
-                    if (input.type === 'number') {
-                        formData[column] = parseFloat(value);
-                        if (isNaN(formData[column])) {
+                    // Handle select dropdowns (foreign keys)
+                    if (input.tagName === 'SELECT') {
+                        const numValue = parseInt(value, 10);
+                        if (!isNaN(numValue)) {
+                            formData[column] = numValue; // Convert to integer
+                        } else {
+                            formData[column] = value; // Keep as string (e.g., method_type)
+                        }
+                    } else if (input.type === 'number') {
+                        const numValue = parseFloat(value);
+                        if (isNaN(numValue)) {
                             isValid = false;
                             errors.push(`${column} must be a valid number`);
                             input.classList.add('border-red-500');
+                        } else {
+                            formData[column] = numValue;
                         }
                     } else if (input.type === 'datetime-local') {
                         formData[column] = new Date(value).toISOString();
