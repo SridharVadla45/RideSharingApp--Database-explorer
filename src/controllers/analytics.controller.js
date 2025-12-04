@@ -160,5 +160,82 @@ export const AnalyticsController = {
             console.error(`Error in getTableAnalytics for table ${req.params.tableName}:`, error);
             res.status(500).json({ error: `Failed to get analytics for table ${req.params.tableName}` });
         }
+    },
+
+    executeCustomQuery: async (req, res) => {
+        try {
+            const { query } = req.body;
+
+            if (!query || typeof query !== 'string') {
+                return res.status(400).json({ error: 'Query is required and must be a string' });
+            }
+
+            // Basic security checks
+            const trimmedQuery = query.trim().toUpperCase();
+
+            // Only allow SELECT queries
+            if (!trimmedQuery.startsWith('SELECT')) {
+                return res.status(403).json({
+                    error: 'Only SELECT queries are allowed for security reasons',
+                    hint: 'Try queries like: SELECT * FROM user LIMIT 10'
+                });
+            }
+
+            // Prevent dangerous operations
+            const dangerousKeywords = ['DROP', 'DELETE', 'UPDATE', 'INSERT', 'ALTER', 'CREATE', 'TRUNCATE', 'EXEC', 'EXECUTE'];
+            for (const keyword of dangerousKeywords) {
+                if (trimmedQuery.includes(keyword)) {
+                    return res.status(403).json({
+                        error: `Query contains forbidden keyword: ${keyword}`,
+                        hint: 'Only SELECT queries are allowed'
+                    });
+                }
+            }
+
+            // Execute the query
+            const results = await prisma.$queryRawUnsafe(query);
+
+            // Format results
+            if (!results || results.length === 0) {
+                return res.json({
+                    columns: [],
+                    rows: [],
+                    rowCount: 0,
+                    message: 'Query executed successfully but returned no results'
+                });
+            }
+
+            // Extract column names from first row
+            const columns = Object.keys(results[0]);
+
+            // Convert BigInt to string for JSON serialization
+            const rows = results.map(row => {
+                const formattedRow = {};
+                for (const key in row) {
+                    if (typeof row[key] === 'bigint') {
+                        formattedRow[key] = row[key].toString();
+                    } else if (row[key] instanceof Date) {
+                        formattedRow[key] = row[key].toISOString();
+                    } else {
+                        formattedRow[key] = row[key];
+                    }
+                }
+                return formattedRow;
+            });
+
+            res.json({
+                columns,
+                rows,
+                rowCount: rows.length,
+                message: 'Query executed successfully'
+            });
+
+        } catch (error) {
+            console.error('Error executing custom query:', error);
+            res.status(500).json({
+                error: 'Failed to execute query',
+                details: error.message
+            });
+        }
     }
 };
